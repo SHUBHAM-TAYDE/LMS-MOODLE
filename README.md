@@ -20,11 +20,11 @@ sudo apt update && sudo apt upgrade -y
 ```bash
 sudo apt install apache2 -y
 ```
-    ### Install MySQL:
+   ### Install MySQL:
 ```bash
 sudo apt install mysql-server -y
 ```
-    ### Install PHP and Required Extensions:
+   ### Install PHP and Required Extensions:
 ```bash
 sudo apt install php php-mysql libapache2-mod-php php-gd php-xmlrpc php-intl php-json php-cli php-xml php-zip php-curl php-mbstring php-soap php-bz2 php-xmlrpc php-ldap php-mysqli php-imagick -y
 ```
