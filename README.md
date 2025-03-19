@@ -9,12 +9,12 @@ explains how to install Moodle, a Learning Management System (LMS), on an Ubuntu
 > - A public IP address (or domain) for your Moodle instance.
 > - A MySQL or MariaDB database server.
 
-1. Update the System
+1. **Update the System**
    Before starting, update your system's package index and upgrade any outdated packages.
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
-2. Install Apache, MySQL, and PHP
+2. **Install Apache, MySQL, and PHP**
    Moodle requires a web server (Apache), a database server (MySQL/MariaDB), and PHP with additional extensions.
    ### Install Apache:
 ```bash
@@ -29,7 +29,7 @@ sudo apt install mysql-server -y
 sudo apt install php php-mysql libapache2-mod-php php-gd php-xmlrpc php-intl php-json php-cli php-xml php-zip php-curl php-mbstring php-soap php-bz2 php-xmlrpc php-ldap php-mysqli php-imagick -y
 ```
 
-3. Configure MySQL for Moodle
+3. **Configure MySQL for Moodle**
    Next, create a database and user for Moodle.
    ### Access MySQL:
 ```bash
@@ -45,7 +45,7 @@ EXIT;
 ```
 Note: Replace 'your_password' with a strong password.
 
-4. Download and Install Moodle
+4. **Download and Install Moodle**
    Download the latest stable version of Moodle:
 ```bash
 cd /var/www/html
@@ -57,14 +57,14 @@ sudo tar -xvzf latest.tgz
 sudo chown -R www-data:www-data /var/www/html/moodle
 sudo chmod -R 755 /var/www/html/moodle
 ```
-5. Create Moodle Data Directory
+5. **Create Moodle Data Directory**
    Moodle requires a separate directory to store data files.
 ```bash
 sudo mkdir /var/moodledata
 sudo chown -R www-data:www-data /var/moodledata
 sudo chmod 770 /var/moodledata
 ```
-6. Configure Apache for Moodle
+6. **Configure Apache for Moodle**
    Create a new Apache site configuration file for Moodle.
 ```bash
 sudo vim /etc/apache2/sites-available/moodle.conf
@@ -100,7 +100,7 @@ Restart Apache:
 sudo systemctl restart apache2
 ```
 
-7. Run Moodle Installation
+7. **Run Moodle Installation**
   1. Open your web browser and go to your Moodle site (e.g., http://your_domain_or_IP).
   2. Follow the on-screen instructions:
       - Choose your language.
