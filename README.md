@@ -10,7 +10,7 @@ explains how to install Moodle, a Learning Management System (LMS), on an Ubuntu
 > - A MySQL or MariaDB database server.
 
 1. **Update the System**
-   Before starting, update your system's package index and upgrade any outdated packages.
+   > Before starting, update your system's package index and upgrade any outdated packages.
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
