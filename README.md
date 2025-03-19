@@ -101,9 +101,9 @@ sudo systemctl restart apache2
 ```
 
 7. Run Moodle Installation
-1. Open your web browser and go to your Moodle site (e.g., http://your_domain_or_IP).
-2. Follow the on-screen instructions:
-Choose your language.
-Configure the database settings (use the database, user, and password created earlier).
-Set up an admin user and site details.
+  1. Open your web browser and go to your Moodle site (e.g., http://your_domain_or_IP).
+  2. Follow the on-screen instructions:
+      - Choose your language.
+      - Configure the database settings (use the database, user, and password created earlier).
+      - Set up an admin user and site details.
 
