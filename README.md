@@ -14,3 +14,11 @@ explains how to install Moodle, a Learning Management System (LMS), on an Ubuntu
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
+2. Install Apache, MySQL, and PHP
+   Moodle requires a web server (Apache), a database server (MySQL/MariaDB), and PHP with additional extensions.
+   ### Install Apache:
+```bash
+sudo apt install apache2 -y
+```
+
+
