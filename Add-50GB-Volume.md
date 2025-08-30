@@ -34,3 +34,15 @@ sudo tar -C /var/www/html -czf /mnt/data/backups/moodle-www-$(date +%F).tar.gz m
 mysqldump -u root -p YOUR_MARIADB_ROOT_PASSWORD moodle > /mnt/data/backups/moodle-db-$(date +%F).sql
 ```
 Also consider an EBS snapshot of the root volume from the AWS Console.
+
+## 1. Create & Attach a 50 GB EBS Volume (AWS Console)
+
+- EC2 → Elastic Block Store → Volumes → Create volume
+
+- Size: 50 GiB, Type: gp3 (or gp2), AZ must match your instance (e.g., ap-south-1a).
+
+- Create → Select the volume → Actions → Attach volume → Choose your instance.
+
+- Device name: /dev/sdf (Linux will map it as /dev/xvdf). Attach.
+
+Alternative device names for data disks: /dev/sd[f-p]. On some Nitro instances, it may appear as /dev/nvme1n1 instead of /dev/xvdf.
