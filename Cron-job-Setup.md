@@ -89,7 +89,7 @@ php /var/www/html/moodle/admin/cli/cron.php
 
 
 Summary
-Job	Schedule	Purpose
-Moodle DB Backup	Weekly @ 2 AM (Sunday)	Creates compressed DB backup
+   Job	                   Schedule	                   Purpose
+Moodle DB Backup	Weekly @ 2 AM (Sunday)	    Creates compressed DB backup
 Old Backup Cleanup	Weekly @ 2:30 AM (Sunday)	Deletes backups older than 28 days
-Moodle Cron	Every 5 minutes	Runs Moodle background tasks
+Moodle Cron	        Every 5 minutes	            Runs Moodle background tasks
