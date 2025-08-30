@@ -46,3 +46,32 @@ Also consider an EBS snapshot of the root volume from the AWS Console.
 - Device name: /dev/sdf (Linux will map it as /dev/xvdf). Attach.
 
 Alternative device names for data disks: /dev/sd[f-p]. On some Nitro instances, it may appear as /dev/nvme1n1 instead of /dev/xvdf.
+
+## 2. Verify Disk on the Instance
+```bash
+lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINTS
+```
+You should see a new 50G disk (e.g., xvdf).
+
+## 3. Format the New Volume (ext4)
+
+Skip if you’ve already formatted it.
+```bash
+sudo mkfs.ext4 /dev/xvdf
+```
+## 4. Create Mount Point & Mount
+
+If root was 100% full and mkdir failed earlier, you can temporarily mount to /media, clean some space, then proceed.
+```bash
+# Create a dedicated mount point
+sudo mkdir -p /mnt/data
+
+
+# Mount the volume
+sudo mount /dev/xvdf /mnt/data
+
+
+# Verify
+df -h | grep xvdf
+```
+Expected: /dev/xvdf 50G … /mnt/data
