@@ -16,7 +16,9 @@ This guide helps you free up a full root volume by moving Moodle application fil
 
 ---
 
-## 0. Pre-checks & Backups (DO THIS FIRST)
+## 0. (Strongly Recommended) Create Snapshots/Backups
+
+Before changes, create at least a DB and web files backup.
 ```bash
 # Check disk usage
 df -h
@@ -30,3 +32,5 @@ sudo tar -C /var/www/html -czf /mnt/data/backups/moodle-www-$(date +%F).tar.gz m
 
 # Backup DB (adjust user/password/db)
 mysqldump -u root -p YOUR_MARIADB_ROOT_PASSWORD moodle > /mnt/data/backups/moodle-db-$(date +%F).sql
+```
+Also consider an EBS snapshot of the root volume from the AWS Console.
