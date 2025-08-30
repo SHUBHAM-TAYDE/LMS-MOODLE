@@ -75,3 +75,127 @@ sudo mount /dev/xvdf /mnt/data
 df -h | grep xvdf
 ```
 Expected: /dev/xvdf 50G … /mnt/data
+
+## 5. Make Mount Persistent (fstab)
+
+Find the UUID and add it to /etc/fstab so it mounts on reboot.
+```bash
+sudo blkid /dev/xvdf
+# Example output: /dev/xvdf: UUID="12345678-90ab-cdef-1234-567890abcdef" TYPE="ext4"
+
+
+sudo nano /etc/fstab
+```
+Append a line (replace with your actual UUID):
+```bash
+UUID=12345678-90ab-cdef-1234-567890abcdef /mnt/data ext4 defaults,nofail,x-systemd.device-timeout=1min 0 2
+```
+Test the fstab entry:
+```bash
+sudo mount -a
+```
+
+## 6. Stop Web Services (Short Downtime)
+```bash
+# Apache
+sudo systemctl stop apache2
+# or Nginx (if you use Nginx as the web server)
+sudo systemctl stop nginx
+```
+
+## 7. Move Moodle Web Code to the New Disk
+
+Default path is often /var/www/html/moodle. Adjust if your path differs.
+
+Simple move (works without extra packages)
+```bash
+sudo mv /var/www/html/moodle /mnt/data/moodle
+```
+Create a symlink so the original path still works:
+```bash
+sudo ln -s /mnt/data/moodle /var/www/html/moodle
+```
+Fix ownership and permissions (typical owner is www-data):
+```bash
+sudo chown -R www-data:www-data /mnt/data/moodle
+```
+Apache FollowSymLinks: Ensure the site vhost allows following symlinks (usually default). If restricted, add Options FollowSymLinks in the relevant <Directory> block and reload Apache.
+
+## 8. Move moodledata to New Disk
+
+moodledata can be very large. It’s usually outside the web root for security.
+
+1. Find its path from Moodle config:
+```bash
+sudo grep dataroot /var/www/html/moodle/config.php
+# Example: $CFG->dataroot = '/var/moodledata';
+```
+2. Move it and relink or repoint:
+
+
+Keep same path with symlink
+```bash
+sudo mv /var/moodledata /mnt/data/moodledata
+sudo ln -s /mnt/data/moodledata /var/moodledata
+sudo chown -R www-data:www-data /mnt/data/moodledata
+```
+Change config.php to the new absolute path
+```bash
+# Edit the dataroot line to point to /mnt/data/moodledata
+sudo nano /var/www/html/moodle/config.php
+# $CFG->dataroot = '/mnt/data/moodledata';
+
+
+# Move the directory
+sudo mv /var/moodledata /mnt/data/moodledata
+sudo chown -R www-data:www-data /mnt/data/moodledata
+```
+Security: Ensure moodledata is not web-accessible (outside /var/www/html).
+
+## 9. Start Services & Verify
+```bash
+# Start web stack
+sudo systemctl start apache2 || sudo systemctl start nginx
+sudo systemctl start cron || true
+
+
+# Quick checks
+ls -ld /var/www/html/moodle
+# should show -> /mnt/data/moodle
+
+
+sudo -u www-data php /var/www/html/moodle/admin/cli/checks.php || true
+```
+Open the site in a browser (replace host/IP):
+```bash
+http://<your-ec2-public-ip>/moodle
+```
+If you changed moodledata path, go to Site administration → Server → Environment and verify no errors. Also try uploading a small file to confirm writes land in /mnt/data/moodledata.
+
+## 10. Free Up Root Space (Safe Cleanup)
+Run these to reclaim space on /:
+```bash
+# Show largest top-level dirs
+sudo du -x -sh /* 2>/dev/null | sort -hr | head -n 15
+
+
+# APT cache
+sudo apt-get clean
+
+
+# Journals/logs (keep 1 day)
+sudo journalctl --vacuum-time=1d
+sudo rm -rf /var/log/*.gz /var/log/*.1
+
+
+# Old kernels & packages
+sudo apt -y autoremove --purge
+```
+Re-check usage:
+```bash
+df -h
+```
+
+Done!
+
+You now have a 50 GB data volume mounted at /mnt/data with Moodle (and optionally moodledata) living there, freeing the root disk and keeping things tidy and scalable.
